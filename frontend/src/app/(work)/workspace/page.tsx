@@ -1,0 +1,3 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = { title: "Usaha saya" };
+export default function WorkspacePage() { return <><div className="page-heading"><div><h1>Usaha saya</h1><p className="muted">Akun dan usaha aktif ditampilkan di bagian atas halaman.</p></div></div><section className="panel form-width"><h2>Catatan dan pemeriksaan stok</h2><p>Gunakan usaha aktif yang sesuai sebelum mencatat transaksi atau melakukan hitungan fisik.</p><p className="muted">StokGuard menyimpan riwayat transaksi dan keputusan agar perbedaan stok dapat diperiksa, bukan langsung dianggap sebagai kecurangan.</p></section></>; }

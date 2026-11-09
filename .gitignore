@@ -1,0 +1,34 @@
+# Local application data and credentials
+.env
+.env.*
+!.env.example
+/data/
+/backups/
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Web
+node_modules/
+.next/
+out/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.superpowers
+docs
+.claude
+# Agent execution artifacts
+.superpowers/
+.playwright-mcp/

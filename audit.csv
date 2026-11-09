@@ -1,0 +1,8 @@
+id,occurred_at,user_id,action,entity_type,entity_id,quantity,note,changes
+7d6cce71-af45-43be-b289-c5b0460dcac8,2026-11-09T12:22:56.212252+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,account_created,user,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,,,"{""role"": ""owner""}"
+2ed56d7f-4cea-476a-b735-5073474e4e8d,2026-11-09T12:24:13.460448+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,session_created,user,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,,,"{""source"": ""web""}"
+e1abd83c-3dd8-44a6-b046-3a21e3ffe05c,2026-11-09T12:36:36.104752+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,product_created,product,08b0b637-c29b-4e14-913e-500f5a2dec79,,,"{""sku"": ""SS""}"
+0cd61aa0-b840-404d-a9c7-8fb591c88718,2026-11-09T12:36:42.253942+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,stocktake_started,stocktake,cb31f791-a686-4c70-a277-121bc33a5ab9,,,"{""baseline_version"": 0}"
+5c99dc78-76f2-4692-9f01-58d7aaeb218e,2026-11-09T12:50:26.069673+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,stocktake_finalized,stocktake,cb31f791-a686-4c70-a277-121bc33a5ab9,1,,"{""difference_quantity"": ""1""}"
+97186dc4-ab71-4e3a-bf40-6d901198df38,2026-11-09T12:55:05.036707+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,session_revoked,user,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,,,"{""source"": ""api""}"
+0bb0d134-f0b7-4f16-96b9-e5d64331728d,2026-11-09T13:18:42.688859+00:00,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,session_created,user,bf9fa6c4-69e9-4c7f-8264-4eef398f1263,,,"{""source"": ""web""}"

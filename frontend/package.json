@@ -1,0 +1,46 @@
+{
+  "name": "stokguard-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "test": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "contracts": "openapi-typescript ../docs/openapi.json -o src/lib/contracts.ts",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/hanken-grotesk": "^5.2.0",
+    "@fontsource/manrope": "^5.2.0",
+    "@tanstack/react-query": "^5.90.0",
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.0"
+  },
+  "overrides": {
+    "@typescript-eslint/typescript-estree": { "minimatch": "^11.0.5" }
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.56.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@testing-library/jest-dom": "^6.9.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "^16.0.0",
+    "jsdom": "^27.2.0",
+    "openapi-typescript": "^7.10.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  }
+}
