@@ -57,3 +57,14 @@ it("requires discrepancy checklist when physical count differs and retains input
   await screen.findByText("Saldo berubah. Hitung ulang diperlukan.");
   expect(screen.getByLabelText("Jumlah fisik terhitung")).toHaveValue(18);
 });
+
+it("structures active counting and checklist verification into adjacent work areas", async () => {
+  setup("24");
+  const input = await screen.findByLabelText("Jumlah fisik terhitung");
+  const checklist = screen.getByRole("group", { name: "Konfirmasi sebelum menyelesaikan opname" });
+
+  expect(input.closest(".work-layout")).not.toBeNull();
+  expect(checklist.closest(".work-layout")).toBe(input.closest(".work-layout"));
+  expect(input.closest(".work-column")).not.toBe(checklist.closest(".work-column"));
+});
+

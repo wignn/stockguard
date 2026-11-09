@@ -133,62 +133,71 @@ export function CountForm({ countId }: { countId: string }) {
           )}
 
           {count.status === "active" && (
-            <form onSubmit={finalize} className="form-width stack">
-              <Comparison
-                system={count.baseline_quantity}
-                physical={countedMilli !== null ? fromMilli(countedMilli) : count.baseline_quantity}
-                difference={diffMilli !== null ? fromMilli(diffMilli) : "0"}
-              />
+            <form onSubmit={finalize} className="stack">
+              <div className="work-layout">
+                <div className="work-column">
+                  <section className="panel stack" aria-label="Input dan perbandingan fisik">
+                    <h2>Hitungan fisik</h2>
+                    <FormField id="counted-quantity" label="Jumlah fisik terhitung" hint={`Satuan ${product.data.unit}. Langkah ${product.data.step_quantity}.`}>
+                      <input
+                        id="counted-quantity"
+                        type="number"
+                        inputMode="decimal"
+                        min="0"
+                        step={product.data.step_quantity}
+                        required
+                        value={counted}
+                        onChange={(event) => setCounted(event.target.value)}
+                      />
+                    </FormField>
 
-              <FormField id="counted-quantity" label="Jumlah fisik terhitung" hint={`Satuan ${product.data.unit}. Langkah ${product.data.step_quantity}.`}>
-                <input
-                  id="counted-quantity"
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step={product.data.step_quantity}
-                  required
-                  value={counted}
-                  onChange={(event) => setCounted(event.target.value)}
-                />
-              </FormField>
+                    <Comparison
+                      system={count.baseline_quantity}
+                      physical={countedMilli !== null ? fromMilli(countedMilli) : count.baseline_quantity}
+                      difference={diffMilli !== null ? fromMilli(diffMilli) : "0"}
+                    />
+                  </section>
+                </div>
 
-              <fieldset className="panel">
-                <legend><strong>Konfirmasi sebelum menyelesaikan opname</strong></legend>
-                <label className="check-label" htmlFor="chk-no-movement">
-                  <input id="chk-no-movement" type="checkbox" checked={noPhysical} onChange={(event) => setNoPhysical(event.target.checked)} />
-                  Tidak ada perpindahan barang fisik selama sesi hitung berlangsung
-                </label>
-
-                {hasDiff && (
-                  <>
-                    <p className="hint">Terdapat selisih sebanyak {fromMilli(diffMilli!)} {product.data.unit}. Lengkapi pemeriksaan fisik sebelum membuka atau memperbarui kasus:</p>
-                    <label className="check-label" htmlFor="chk-recounted">
-                      <input id="chk-recounted" type="checkbox" checked={recounted} onChange={(event) => setRecounted(event.target.checked)} />
-                      Sudah dihitung ulang secara fisik
+                <div className="work-column">
+                  <fieldset className="panel stack">
+                    <legend><strong>Konfirmasi sebelum menyelesaikan opname</strong></legend>
+                    <label className="check-label" htmlFor="chk-no-movement">
+                      <input id="chk-no-movement" type="checkbox" checked={noPhysical} onChange={(event) => setNoPhysical(event.target.checked)} />
+                      Tidak ada perpindahan barang fisik selama sesi hitung berlangsung
                     </label>
-                    <label className="check-label" htmlFor="chk-rack">
-                      <input id="chk-rack" type="checkbox" checked={rackChecked} onChange={(event) => setRackChecked(event.target.checked)} />
-                      Area rak pajang sudah diperiksa
-                    </label>
-                    <label className="check-label" htmlFor="chk-storage">
-                      <input id="chk-storage" type="checkbox" checked={storageChecked} onChange={(event) => setStorageChecked(event.target.checked)} />
-                      Area penyimpanan/gudang sudah diperiksa
-                    </label>
-                  </>
-                )}
-              </fieldset>
 
-              {role === "owner" && count.user_id !== session?.user.id && (
-                <FormField id="cancel-note" label="Alasan pembatalan pemilik">
-                  <input id="cancel-note" value={cancelNote} onChange={(event) => setCancelNote(event.target.value)} />
-                </FormField>
-              )}
+                    {hasDiff && (
+                      <>
+                        <p className="hint">Terdapat selisih sebanyak {fromMilli(diffMilli!)} {product.data.unit}. Lengkapi pemeriksaan fisik sebelum membuka atau memperbarui kasus:</p>
+                        <label className="check-label" htmlFor="chk-recounted">
+                          <input id="chk-recounted" type="checkbox" checked={recounted} onChange={(event) => setRecounted(event.target.checked)} />
+                          Sudah dihitung ulang secara fisik
+                        </label>
+                        <label className="check-label" htmlFor="chk-rack">
+                          <input id="chk-rack" type="checkbox" checked={rackChecked} onChange={(event) => setRackChecked(event.target.checked)} />
+                          Area rak pajang sudah diperiksa
+                        </label>
+                        <label className="check-label" htmlFor="chk-storage">
+                          <input id="chk-storage" type="checkbox" checked={storageChecked} onChange={(event) => setStorageChecked(event.target.checked)} />
+                          Area penyimpanan/gudang sudah diperiksa
+                        </label>
+                      </>
+                    )}
 
-              <div className="actions">
-                <button type="submit" disabled={!canSubmit || busy}>{busy ? "Menyimpan…" : "Selesaikan opname"}</button>
-                <button type="button" className="secondary" disabled={busy} onClick={() => void act("extend")}>Perpanjang 15 menit</button>
-                <button type="button" className="secondary" disabled={busy} onClick={() => void act("cancel")}>Batalkan sesi</button>
+                    {role === "owner" && count.user_id !== session?.user.id && (
+                      <FormField id="cancel-note" label="Alasan pembatalan pemilik">
+                        <input id="cancel-note" value={cancelNote} onChange={(event) => setCancelNote(event.target.value)} />
+                      </FormField>
+                    )}
+
+                    <div className="actions">
+                      <button type="submit" disabled={!canSubmit || busy}>{busy ? "Menyimpan…" : "Selesaikan opname"}</button>
+                      <button type="button" className="secondary" disabled={busy} onClick={() => void act("extend")}>Perpanjang 15 menit</button>
+                      <button type="button" className="secondary" disabled={busy} onClick={() => void act("cancel")}>Batalkan sesi</button>
+                    </div>
+                  </fieldset>
+                </div>
               </div>
             </form>
           )}
