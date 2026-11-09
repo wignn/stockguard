@@ -37,8 +37,13 @@ def migrate():
 
 
 @cli.command()
-def setup(name: str = typer.Option(...), username: str = typer.Option(...)):
-    password = typer.prompt("Password pemilik", hide_input=True, confirmation_prompt=True)
+def setup(
+    name: str = typer.Option(...),
+    username: str = typer.Option(...),
+    password: str | None = typer.Option(None, "--password", help="Password pemilik"),
+):
+    if not password:
+        password = typer.prompt("Password pemilik", hide_input=True, confirmation_prompt=True)
     settings = Settings()
     migrate()
     with operation_slot(settings, "cli-setup"):
@@ -53,8 +58,14 @@ def setup(name: str = typer.Option(...), username: str = typer.Option(...)):
 
 
 @cli.command("add-user")
-def add_user_command(business_id: UUID, username: str, role: str = "staff"):
-    password = typer.prompt("Password pengguna", hide_input=True, confirmation_prompt=True)
+def add_user_command(
+    business_id: UUID,
+    username: str,
+    role: str = "staff",
+    password: str | None = typer.Option(None, "--password", help="Password pengguna"),
+):
+    if not password:
+        password = typer.prompt("Password pengguna", hide_input=True, confirmation_prompt=True)
     settings = Settings()
     with operation_slot(settings, "cli-add-user"):
         engine = make_engine(settings.database_path)
@@ -67,8 +78,12 @@ def add_user_command(business_id: UUID, username: str, role: str = "staff"):
 
 
 @cli.command("change-password")
-def change_password_command(username: str):
-    password = typer.prompt("Password baru", hide_input=True, confirmation_prompt=True)
+def change_password_command(
+    username: str,
+    password: str | None = typer.Option(None, "--password", help="Password baru"),
+):
+    if not password:
+        password = typer.prompt("Password baru", hide_input=True, confirmation_prompt=True)
     encoded = hash_password(password)
     settings = Settings()
     with operation_slot(settings, "cli-change-password"):
@@ -144,11 +159,17 @@ def cleanup_command(
 def seed_demo_command(
     owner_username: str = typer.Option("demo-pemilik", "--owner-username"),
     staff_username: str = typer.Option("demo-staf", "--staff-username"),
+    owner_password: str | None = typer.Option(None, "--owner-password"),
+    staff_password: str | None = typer.Option(None, "--staff-password"),
 ):
-    owner_password = typer.prompt(
-        "Password pemilik demo", hide_input=True, confirmation_prompt=True
-    )
-    staff_password = typer.prompt("Password staf demo", hide_input=True, confirmation_prompt=True)
+    if not owner_password:
+        owner_password = typer.prompt(
+            "Password pemilik demo", hide_input=True, confirmation_prompt=True
+        )
+    if not staff_password:
+        staff_password = typer.prompt(
+            "Password staf demo", hide_input=True, confirmation_prompt=True
+        )
     settings = Settings()
     migrate()
     try:

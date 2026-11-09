@@ -11,7 +11,48 @@ Aplikasi lokal untuk pencatatan stok barang jadi UMKM, opname fisik, investigasi
 
 Mutasi stok memakai ledger append-only. Koreksi dilakukan melalui alur persetujuan atau pembalikan, bukan mengedit riwayat. Kuantitas API berupa string desimal maksimal tiga angka di belakang koma; biaya berupa string rupiah bulat. Hasil OCR selalu berupa draf yang harus ditinjau manusia sebelum dibukukan.
 
-## Jalankan dengan Makefile
+## Deployment Produksi dengan Docker & Bun Terbaru
+
+StokGuard siap dideploy ke server produksi dengan **Docker Compose**, menggunakan **Bun terbaru** untuk frontend Next.js 16 standalone dan **Python 3.12 dengan Tesseract OCR** untuk backend serta worker.
+
+### 1. Konfigurasi Awal
+Salin berkas konfigurasi template:
+```bash
+cp .env.example .env
+```
+*(Sesuaikan `WEB_PORT`, `API_PORT`, dan kredensial opsional jika diperlukan)*
+
+### 2. Jalankan Stack
+```bash
+# Build dan jalankan seluruh container (API, Worker OCR, Frontend Bun)
+docker compose up --build -d
+
+# Periksa status kontainer
+docker compose ps
+```
+
+### 3. Inisialisasi Akun Pemilik atau Seed Demo
+```bash
+# Setup akun pemilik pertama (interaktif dengan prompt password)
+docker compose exec api python -m stokguard.cli setup --name "Nama Usaha" --username "pemilik"
+
+# ATAU: Seed data transaksi demo lengkap
+docker compose exec api python -m stokguard.cli seed-demo
+```
+
+Atau menggunakan perintah make:
+```bash
+make docker-build
+make docker-up
+make docker-setup BUSINESS_NAME="Nama Usaha" USERNAME="pemilik"
+make docker-seed
+make docker-logs
+make docker-down
+```
+
+Panduan lengkap mengenai arsitektur, volume data persisten, dan pemeliharaan tersedia di [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+## Jalankan dengan Makefile (Lokal)
 
 Dari direktori proyek (GNU Make, `uv`, dan npm harus tersedia):
 

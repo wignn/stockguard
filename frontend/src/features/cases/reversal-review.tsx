@@ -102,7 +102,7 @@ function ReversalItem({ item, onDone }: { item: ReversalView; onDone: () => void
             <p>Anda mengajukan permintaan pembalikan ini sendiri. Pemilik tidak dapat menyetujui permintaannya sendiri; gunakan akun pemilik lain atau minta staf yang mengajukan.</p>
           </div>
         ) : (
-          <form onSubmit={(event: FormEvent) => event.preventDefault()} className="form-width stack">
+          <form onSubmit={(event: FormEvent) => event.preventDefault()} className="stack">
             <FormField id={`rev-note-${item.id}`} label="Catatan keputusan pembalikan" hint="Wajib diisi bila menolak permintaan.">
               <input id={`rev-note-${item.id}`} value={note} onChange={(event) => setNote(event.target.value)} />
             </FormField>

@@ -22,48 +22,54 @@ export default function ReviewPage() {
         </div>
       </div>
 
-      <section className="stack" aria-label="Antrean kasus selisih">
-        <h2>Antrean kasus selisih</h2>
-        <QueryState
-          loading={cases.isPending || products.isPending}
-          error={cases.error || products.error}
-          retry={() => { void cases.refetch(); void products.refetch(); }}
-          empty={!openCases.length ? "Tidak ada kasus selisih yang menunggu keputusan atau pemeriksaan." : undefined}
-        >
-          <div className="table-wrap">
-            <table>
-              <caption className="sr-only">Antrean kasus selisih</caption>
-              <thead>
-                <tr>
-                  <th>Produk</th>
-                  <th>Selisih</th>
-                  <th>Perkiraan nilai</th>
-                  <th>Status</th>
-                  <th>Tindakan</th>
-                </tr>
-              </thead>
-              <tbody>
-                {openCases.map((item) => {
-                  const prod = productMap.get(item.product_id);
-                  return (
-                    <tr key={item.id}>
-                      <td>{prod ? `${prod.sku} · ${prod.name}` : item.product_id.slice(0, 8)}</td>
-                      <td>{formatQuantity(item.difference_quantity)} {prod?.unit || ""}</td>
-                      <td>{formatRupiah(item.estimated_value_rupiah)}</td>
-                      <td>{caseStatusNames[item.status] || item.status}</td>
-                      <td>
-                        <Link href={`/cases/${item.id}`}>Tinjau kasus {prod?.name || item.id.slice(0, 6)}</Link>
-                      </td>
+      <div className="work-layout">
+        <div className="work-column">
+          <section className="panel stack" aria-label="Antrean kasus selisih">
+            <h2>Antrean kasus selisih</h2>
+            <QueryState
+              loading={cases.isPending || products.isPending}
+              error={cases.error || products.error}
+              retry={() => { void cases.refetch(); void products.refetch(); }}
+              empty={!openCases.length ? "Tidak ada kasus selisih yang menunggu keputusan atau pemeriksaan." : undefined}
+            >
+              <div className="table-wrap responsive-table" tabIndex={0} role="region" aria-label="Gulir antrean kasus selisih">
+                <table>
+                  <caption className="sr-only">Antrean kasus selisih</caption>
+                  <thead>
+                    <tr>
+                      <th>Produk</th>
+                      <th>Selisih</th>
+                      <th>Perkiraan nilai</th>
+                      <th>Status</th>
+                      <th>Tindakan</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </QueryState>
-      </section>
+                  </thead>
+                  <tbody>
+                    {openCases.map((item) => {
+                      const prod = productMap.get(item.product_id);
+                      return (
+                        <tr key={item.id}>
+                          <td>{prod ? `${prod.sku} · ${prod.name}` : item.product_id.slice(0, 8)}</td>
+                          <td data-label="Selisih">{formatQuantity(item.difference_quantity)} {prod?.unit || ""}</td>
+                          <td data-label="Perkiraan nilai">{formatRupiah(item.estimated_value_rupiah)}</td>
+                          <td data-label="Status">{caseStatusNames[item.status] || item.status}</td>
+                          <td>
+                            <Link href={`/cases/${item.id}`}>Tinjau kasus {prod?.name || item.id.slice(0, 6)}</Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </QueryState>
+          </section>
+        </div>
 
-      <ReversalReview />
+        <div className="work-column">
+          <ReversalReview />
+        </div>
+      </div>
     </div>
   );
 }

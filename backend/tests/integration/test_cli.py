@@ -113,3 +113,28 @@ def test_cli_seed_duplicate_reports_recovery_without_changing_existing_data(tmp_
             assert snapshot() == before
     finally:
         engine.dispose()
+
+
+def test_cli_setup_and_seed_with_password_options(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+
+    from stokguard.cli import cli
+
+    monkeypatch.setenv("STOKGUARD_DATA_DIR", str(tmp_path))
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        [
+            "setup",
+            "--name",
+            "Non Interactive",
+            "--username",
+            "owner-non-interactive",
+            "--password",
+            "secret123456",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert "Usaha berhasil dibuat" in result.output
+    assert "secret123456" not in result.output
+

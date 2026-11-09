@@ -18,5 +18,59 @@ export function ProductForm({ product, onDone }: { product?: Product; onDone: ()
     catch (failure) { setError(failure instanceof Error ? failure.message : "Produk belum tersimpan."); }
     finally { setBusy(false); }
   }
-  return <form onSubmit={submit} className="form-width">{error && <p role="alert" className="notice error">{error}</p>}{Object.entries({ sku: "Kode produk (SKU)", name: "Nama produk", unit: "Satuan dasar", step_quantity: "Langkah jumlah", cost_rupiah: "Harga pokok per satuan (Rp)" }).map(([key, label]) => <FormField key={key} id={`product-${key}`} label={label} hint={key === "step_quantity" ? "Pcs utuh: 1. Berat pecahan: misalnya 0.001." : undefined}><input id={`product-${key}`} required value={values[key as keyof typeof values]} onChange={(event) => setValues({ ...values, [key]: event.target.value })} disabled={!!product && product.balance_version > 0 && ["unit", "step_quantity"].includes(key)} inputMode={["step_quantity", "cost_rupiah"].includes(key) ? "decimal" : "text"} /></FormField>)}{product && product.balance_version > 0 && <p className="hint">Satuan dan langkah terkunci karena sudah ada transaksi.</p>}<button disabled={busy}>{busy ? "Menyimpan…" : "Simpan produk"}</button></form>;
+  return (
+    <form onSubmit={submit} className="stack">
+      {error && <p role="alert" className="notice error">{error}</p>}
+      <div className="form-grid">
+        <FormField id="product-sku" label="Kode produk (SKU)">
+          <input
+            id="product-sku"
+            required
+            value={values.sku}
+            onChange={(event) => setValues({ ...values, sku: event.target.value })}
+          />
+        </FormField>
+        <FormField id="product-name" label="Nama produk">
+          <input
+            id="product-name"
+            required
+            value={values.name}
+            onChange={(event) => setValues({ ...values, name: event.target.value })}
+          />
+        </FormField>
+        <FormField id="product-unit" label="Satuan dasar">
+          <input
+            id="product-unit"
+            required
+            value={values.unit}
+            disabled={!!product && product.balance_version > 0}
+            onChange={(event) => setValues({ ...values, unit: event.target.value })}
+          />
+        </FormField>
+        <FormField id="product-step_quantity" label="Langkah jumlah" hint="Pcs utuh: 1. Berat pecahan: misalnya 0.001.">
+          <input
+            id="product-step_quantity"
+            required
+            value={values.step_quantity}
+            disabled={!!product && product.balance_version > 0}
+            inputMode="decimal"
+            onChange={(event) => setValues({ ...values, step_quantity: event.target.value })}
+          />
+        </FormField>
+        <FormField id="product-cost_rupiah" label="Harga pokok per satuan (Rp)">
+          <input
+            id="product-cost_rupiah"
+            required
+            value={values.cost_rupiah}
+            inputMode="decimal"
+            onChange={(event) => setValues({ ...values, cost_rupiah: event.target.value })}
+          />
+        </FormField>
+      </div>
+      {product && product.balance_version > 0 && <p className="hint">Satuan dan langkah terkunci karena sudah ada transaksi.</p>}
+      <div className="actions">
+        <button disabled={busy}>{busy ? "Menyimpan…" : "Simpan produk"}</button>
+      </div>
+    </form>
+  );
 }

@@ -481,93 +481,96 @@ export function DraftEditor({ draftId }: { draftId: string }) {
             <JobStatus jobId={draft.ocr_job_id} fileId={draft.file_id} />
           )}
 
-          {evidence.data && (
-            <section className="panel stack" aria-label="Berkas nota">
-              <EvidenceViewer
-                items={[evidence.data]}
-                title="Berkas bukti nota"
-              />
-            </section>
-          )}
-
-          {draft.original_ocr && (
-            <section
-              className="panel stack"
-              aria-label="Teks bacaan OCR mentah"
-            >
-              <div className="page-heading">
-                <h2>Teks bacaan OCR</h2>
-                <span className="badge warning">
-                  [!] Hasil bacaan mesin · Belum diperiksa manusia
-                </span>
-              </div>
-              <pre className="ocr-text">{draft.original_ocr.raw_text}</pre>
-            </section>
-          )}
-
-          <section className="panel form-width stack" aria-label="Metadata nota">
-            <h2>Informasi nota</h2>
-            {metaError && (
-              <p role="alert" className="notice error">
-                {metaError}
-              </p>
-            )}
-            {metaNotice && (
-              <p role="status" className="notice success">
-                {metaNotice}
-              </p>
-            )}
-            <form onSubmit={saveMetadata} className="stack">
-              <div className="split">
-                <FormField id="draft-receipt-number" label="Nomor nota">
-                  <input
-                    id="draft-receipt-number"
-                    value={receiptNumber}
-                    disabled={metaBusy || draft.status !== "pending"}
-                    onChange={(event) =>
-                      setReceiptNumberDraft(event.target.value)
-                    }
+          <div className="work-layout work-layout--aside">
+            <div className="work-column">
+              {evidence.data && (
+                <section className="panel stack" aria-label="Berkas nota">
+                  <EvidenceViewer
+                    items={[evidence.data]}
+                    title="Berkas bukti nota"
                   />
-                </FormField>
-                <FormField id="draft-receipt-date" label="Tanggal nota">
-                  <input
-                    id="draft-receipt-date"
-                    type="date"
-                    value={receiptDate}
-                    disabled={metaBusy || draft.status !== "pending"}
-                    onChange={(event) =>
-                      setReceiptDateDraft(event.target.value)
-                    }
-                  />
-                </FormField>
-              </div>
-              {draft.status === "pending" && (
-                <div>
-                  <button
-                    type="submit"
-                    className="secondary"
-                    disabled={metaBusy}
-                  >
-                    Simpan info nota
-                  </button>
-                </div>
+                </section>
               )}
-            </form>
-          </section>
 
-          <div className="stack">
-            <h2>Baris transaksi draf</h2>
-            {draft.lines.map((line, index) => (
-              <LineRowEditor
-                key={line.id}
-                draftId={draft.id}
-                line={line}
-                index={index}
-                products={activeProducts}
-                isOwner={role === "owner"}
-                onChanged={() => void draftQuery.refetch()}
-              />
-            ))}
+              <section className="panel stack" aria-label="Metadata nota">
+                <h2>Informasi nota</h2>
+                {metaError && (
+                  <p role="alert" className="notice error">
+                    {metaError}
+                  </p>
+                )}
+                {metaNotice && (
+                  <p role="status" className="notice success">
+                    {metaNotice}
+                  </p>
+                )}
+                <form onSubmit={saveMetadata} className="stack">
+                  <div className="split">
+                    <FormField id="draft-receipt-number" label="Nomor nota">
+                      <input
+                        id="draft-receipt-number"
+                        value={receiptNumber}
+                        disabled={metaBusy || draft.status !== "pending"}
+                        onChange={(event) =>
+                          setReceiptNumberDraft(event.target.value)
+                        }
+                      />
+                    </FormField>
+                    <FormField id="draft-receipt-date" label="Tanggal nota">
+                      <input
+                        id="draft-receipt-date"
+                        type="date"
+                        value={receiptDate}
+                        disabled={metaBusy || draft.status !== "pending"}
+                        onChange={(event) =>
+                          setReceiptDateDraft(event.target.value)
+                        }
+                      />
+                    </FormField>
+                  </div>
+                  {draft.status === "pending" && (
+                    <div>
+                      <button
+                        type="submit"
+                        className="secondary"
+                        disabled={metaBusy}
+                      >
+                        Simpan info nota
+                      </button>
+                    </div>
+                  )}
+                </form>
+              </section>
+
+              {draft.original_ocr && (
+                <details className="disclosure" aria-label="Teks bacaan OCR mentah">
+                  <summary>Teks bacaan OCR (hasil mesin)</summary>
+                  <div className="stack">
+                    <p className="hint">
+                      [!] Hasil bacaan mesin · Belum diperiksa manusia
+                    </p>
+                    <pre className="ocr-text">{draft.original_ocr.raw_text}</pre>
+                  </div>
+                </details>
+              )}
+            </div>
+
+            <div className="work-column">
+              <section className="stack" aria-label="Baris transaksi draf">
+                <h2>Baris transaksi draf</h2>
+                {draft.lines.map((line, index) => (
+                  <LineRowEditor
+                    key={line.id}
+                    draftId={draft.id}
+                    line={line}
+                    index={index}
+                    products={activeProducts}
+                    isOwner={role === "owner"}
+                    onChanged={() => void draftQuery.refetch()}
+                  />
+                ))}
+              </section>
+            </div>
           </div>
         </div>
       )}

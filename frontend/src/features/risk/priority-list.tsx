@@ -88,7 +88,7 @@ export function PriorityList() {
               </Link>
             </div>
           ) : (
-            <div className="table-wrap responsive-table">
+            <div className="table-wrap responsive-table" tabIndex={0} role="region" aria-label="Gulir daftar prioritas cek fisik">
               <table>
                 <caption className="sr-only">
                   Daftar prioritas cek fisik produk
@@ -160,7 +160,7 @@ export function PriorityList() {
               {unresolvedCasesCount === 0 ? "Tidak ada kasus selisih yang sedang berjalan." : "Tidak ada kasus terbuka pada 50 riwayat yang dimuat. Buka Semua kasus untuk menelusuri riwayat lainnya."}
             </p>
           ) : (
-            <div className="table-wrap responsive-table">
+            <div className="table-wrap responsive-table" tabIndex={0} role="region" aria-label="Gulir kasus selisih berjalan">
               <table>
                 <caption className="sr-only">
                   Kasus selisih yang belum selesai

@@ -1,0 +1,15 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
+tests
+scripts/e2e_server.py
+test-results
+.git
+.gitignore
+*.log
+.env
+.env.local

@@ -1,0 +1,79 @@
+services:
+  # Backend API Service (FastAPI + Uvicorn)
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: stokguard-api:latest
+    container_name: stokguard-api
+    restart: unless-stopped
+    environment:
+      - STOKGUARD_DATA_DIR=/app/data
+      - STOKGUARD_ALLOWED_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000","http://web:3000","http://localhost"]
+      - STOKGUARD_SECURE_COOKIES=${STOKGUARD_SECURE_COOKIES:-false}
+      - STOKGUARD_TESSERACT_COMMAND=tesseract
+      - STOKGUARD_OCR_LANGUAGES=eng+ind
+      - AUTO_SETUP=${AUTO_SETUP:-false}
+      - BUSINESS_NAME=${BUSINESS_NAME:-}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - SEED_DEMO=${SEED_DEMO:-false}
+      - DEMO_OWNER_USERNAME=${DEMO_OWNER_USERNAME:-demo-pemilik}
+      - DEMO_STAFF_USERNAME=${DEMO_STAFF_USERNAME:-demo-staf}
+      - DEMO_OWNER_PASSWORD=${DEMO_OWNER_PASSWORD:-}
+      - DEMO_STAFF_PASSWORD=${DEMO_STAFF_PASSWORD:-}
+    volumes:
+      - stokguard_data:/app/data
+    ports:
+      - "${API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Background Asynchronous OCR Worker
+  worker:
+    image: stokguard-api:latest
+    container_name: stokguard-worker
+    restart: unless-stopped
+    command: ["python", "-m", "stokguard.cli", "worker"]
+    environment:
+      - STOKGUARD_DATA_DIR=/app/data
+      - STOKGUARD_TESSERACT_COMMAND=tesseract
+      - STOKGUARD_OCR_LANGUAGES=eng+ind
+    volumes:
+      - stokguard_data:/app/data
+    depends_on:
+      api:
+        condition: service_healthy
+
+  # Frontend Web UI (Next.js 16 Standalone with Bun latest)
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - API_ORIGIN=http://api:8000
+    image: stokguard-web:latest
+    container_name: stokguard-web
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - API_ORIGIN=http://api:8000
+      - NODE_ENV=production
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  stokguard_data:
+    name: stokguard_data
+
+networks:
+  default:
+    name: stokguard-net
