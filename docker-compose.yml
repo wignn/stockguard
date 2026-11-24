@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     environment:
       - STOKGUARD_DATA_DIR=/app/data
-      - STOKGUARD_ALLOWED_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000","http://web:3000","http://localhost"]
+      - STOKGUARD_ALLOWED_ORIGINS=["http://localhost:3000","http://localhost:3005","http://127.0.0.1:3005","http://web:3000","http://localhost","https://stockguard.wign.dev","http://43.134.104.71:3005","http://100.94.214.36:3005"]
       - STOKGUARD_SECURE_COOKIES=${STOKGUARD_SECURE_COOKIES:-false}
       - STOKGUARD_TESSERACT_COMMAND=tesseract
       - STOKGUARD_OCR_LANGUAGES=eng+ind
@@ -42,6 +42,8 @@ services:
     container_name: stokguard-worker
     restart: unless-stopped
     entrypoint: ["python", "-m", "stokguard.cli", "worker"]
+    healthcheck:
+      disable: true
     environment:
       - STOKGUARD_DATA_DIR=/app/data
       - STOKGUARD_TESSERACT_COMMAND=tesseract
@@ -68,7 +70,7 @@ services:
       - API_ORIGIN=http://api:8000
       - NODE_ENV=production
     ports:
-      - "${WEB_PORT:-3000}:3000"
+      - "${WEB_PORT:-3005}:3000"
     depends_on:
       api:
         condition: service_healthy
