@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv for deterministic package installation
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# Install uv via pip to avoid external registry (GHCR) token/auth blocks
+RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 

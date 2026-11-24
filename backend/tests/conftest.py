@@ -9,7 +9,7 @@ from stokguard.main import create_app
 
 class FrozenClock:
     def __init__(self):
-        self.value = datetime(2026, 11, 9, 8, tzinfo=UTC)
+        self.value = datetime.now(UTC)
 
     def now(self):
         return self.value

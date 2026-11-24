@@ -35,10 +35,13 @@ services:
 
   # Background Asynchronous OCR Worker
   worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     image: stokguard-api:latest
     container_name: stokguard-worker
     restart: unless-stopped
-    command: ["python", "-m", "stokguard.cli", "worker"]
+    entrypoint: ["python", "-m", "stokguard.cli", "worker"]
     environment:
       - STOKGUARD_DATA_DIR=/app/data
       - STOKGUARD_TESSERACT_COMMAND=tesseract
